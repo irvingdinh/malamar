@@ -12,6 +12,7 @@ import { isAppError, log, getConfig } from './modules/core'
 import { workspaces } from './modules/workspaces'
 import { agents } from './modules/agents'
 import { workspaceTasks, tasks, attachments } from './modules/tasks'
+import { templates } from './modules/templates'
 
 const VERSION = '0.0.1'
 
@@ -68,6 +69,7 @@ app.get('/api/health', async (c) => {
 app.route('/api/workspaces', workspaces)
 app.route('/api/workspaces/:id/agents', agents)
 app.route('/api/workspaces/:id/tasks', workspaceTasks)
+app.route('/api/workspaces/:id/templates', templates)
 app.route('/api/tasks', tasks)
 app.route('/api/attachments', attachments)
 

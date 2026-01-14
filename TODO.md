@@ -252,7 +252,7 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 6: Templates Module
 
 ### Template Repository
-- [ ] Create `server/src/modules/templates/repository.ts`
+- [x] Create `server/src/modules/templates/repository.ts`
   - `findByWorkspaceId(workspaceId)`: List templates ordered by `order`
   - `findById(id)`: Get single template
   - `create(data)`: Insert template
@@ -260,23 +260,23 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `delete(id)`: Delete template
 
 ### Template Service
-- [ ] Create `server/src/modules/templates/service.ts`
+- [x] Create `server/src/modules/templates/service.ts`
   - `listByWorkspace(workspaceId)`: Get templates
   - `get(id)`: Get template
   - `create(workspaceId, data)`: Create template
   - `update(id, data)`: Update template
   - `delete(id)`: Delete template
-- [ ] Create `server/src/modules/templates/types.ts` with `TaskTemplate` interface
+- [x] Create `server/src/modules/templates/types.ts` with `TaskTemplate` interface
 
 ### Template Routes
-- [ ] Create `server/src/modules/templates/routes.ts`
+- [x] Create `server/src/modules/templates/routes.ts`
   - `GET /api/workspaces/:id/templates`: List templates
   - `POST /api/workspaces/:id/templates`: Create template
   - `PUT /api/workspaces/:id/templates/:templateId`: Update template
   - `DELETE /api/workspaces/:id/templates/:templateId`: Delete template
 
 ### Templates Module Exports
-- [ ] Create `server/src/modules/templates/index.ts`
+- [x] Create `server/src/modules/templates/index.ts`
 
 ---
 
