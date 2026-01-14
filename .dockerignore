@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# Build artifacts
+dist/
+malamar
+malamar.exe
+server/public/
+
+# Dependencies (will be installed in container)
+server/node_modules/
+ui/node_modules/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!server/README.md
+
+# UI source (not needed for server-only build)
+ui/
+
+# Test files
+*.test.ts
+*.spec.ts
+__tests__/

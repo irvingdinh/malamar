@@ -553,7 +553,7 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 14: Build & Release
 
 ### Makefile Enhancement
-- [ ] Complete Makefile with all targets:
+- [x] Complete Makefile with all targets:
   - `dev-ui`: Start UI dev server (for future UI)
   - `dev-server`: Start server with watch mode
   - `build-ui`: Build UI to server/public/ui
@@ -565,16 +565,16 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `version`: Show current version
 
 ### Cross-Platform Binary Compilation
-- [ ] Add Bun compile targets:
+- [x] Add Bun compile targets:
   - `bun-darwin-arm64` (Apple Silicon)
   - `bun-darwin-x64` (Intel Mac)
   - `bun-linux-x64`
   - `bun-linux-arm64`
   - `bun-windows-x64`
-- [ ] Output to `dist/` directory with platform suffix
+- [x] Output to `dist/` directory with platform suffix
 
 ### Dockerfile
-- [ ] Create `Dockerfile` for containerized deployment
+- [x] Create `Dockerfile` for containerized deployment
   - Multi-stage build: build + runtime
   - Use Bun base image
   - Copy compiled binary
@@ -583,9 +583,9 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - Health check endpoint
 
 ### UI Build Integration
-- [ ] Configure Vite to output to `ui/dist/`
-- [ ] Makefile `build-ui` copies to `server/public/ui/`
-- [ ] Server serves static files from embedded directory
+- [x] Configure Vite to output to `ui/dist/`
+- [x] Makefile `build-ui` copies to `server/public/ui/`
+- [x] Server serves static files from embedded directory
 
 ---
 
