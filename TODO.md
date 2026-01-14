@@ -354,25 +354,25 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 9: Executor Module
 
 ### Concurrency Pool
-- [ ] Create `server/src/modules/executor/pool.ts`
+- [x] Create `server/src/modules/executor/pool.ts`
   - Semaphore implementation for limiting concurrent executions
   - `acquire()`: Wait for slot, return release function
   - `tryAcquire()`: Non-blocking acquire, return null if full
   - `getStats()`: Return current/max concurrent counts
-- [ ] Read maxConcurrent from config (default: 0 = unlimited)
+- [x] Read maxConcurrent from config (default: 0 = unlimited)
 
 ### Claude CLI Adapter
-- [ ] Create `server/src/modules/executor/adapters/claude.ts`
+- [x] Create `server/src/modules/executor/adapters/claude.ts`
   - `spawn(workspacePath, inputPath)`: Spawn Claude CLI process
   - Command: `claude --output-format stream-json --verbose -p --dangerously-skip-permissions`
   - Stdin: `Read {inputPath} and follow the instructions in fully autonomous mode.`
   - Parse stream-json output line by line
   - Return process handle for control
-- [ ] Implement output parsing: extract content from stream-json format
-- [ ] Handle process termination (normal exit, timeout, kill)
+- [x] Implement output parsing: extract content from stream-json format
+- [x] Handle process termination (normal exit, timeout, kill)
 
 ### Executor Service
-- [ ] Create `server/src/modules/executor/service.ts`
+- [x] Create `server/src/modules/executor/service.ts`
   - `execute(execution, task, agent, workspace)`: Run single agent execution
     1. Acquire concurrency slot
     2. Prepare workspace directory
@@ -382,17 +382,17 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
     6. Read task_output.json
     7. Update execution record
     8. Release slot
-- [ ] Implement timeout handling: kill process if agent.timeoutMinutes exceeded
-- [ ] Track running processes for cancellation
+- [x] Implement timeout handling: kill process if agent.timeoutMinutes exceeded
+- [x] Track running processes for cancellation
 
 ### Process Management
-- [ ] Maintain map of executionId -> process handle
-- [ ] `cancel(executionId)`: Kill process, update execution status
-- [ ] `cancelByTask(taskId)`: Kill all processes for task
-- [ ] Cleanup on process exit (release slot, update status)
+- [x] Maintain map of executionId -> process handle
+- [x] `cancel(executionId)`: Kill process, update execution status
+- [x] `cancelByTask(taskId)`: Kill all processes for task
+- [x] Cleanup on process exit (release slot, update status)
 
 ### Executor Module Exports
-- [ ] Create `server/src/modules/executor/index.ts`
+- [x] Create `server/src/modules/executor/index.ts`
 
 ---
 
