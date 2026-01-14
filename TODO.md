@@ -176,54 +176,54 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 5: Tasks Module
 
 ### Task Repository
-- [ ] Create `server/src/modules/tasks/repository.ts`
+- [x] Create `server/src/modules/tasks/repository.ts`
   - `findByWorkspaceId(workspaceId, filters?)`: List tasks with optional status filter
   - `findById(id)`: Get single task
   - `create(data)`: Insert task
   - `update(id, data)`: Update task fields
   - `delete(id)`: Delete task (comments, attachments cascade)
   - `updateStatus(id, status)`: Update status with timestamp handling
-- [ ] Create `server/src/modules/tasks/types.ts` with `Task`, `TaskStatus` types
+- [x] Create `server/src/modules/tasks/types.ts` with `Task`, `TaskStatus` types
 
 ### Comment Repository
-- [ ] Create `server/src/modules/tasks/comment-repository.ts`
+- [x] Create `server/src/modules/tasks/comment-repository.ts`
   - `findByTaskId(taskId)`: List comments ordered by created_at asc
   - `create(data)`: Insert comment
   - `delete(id)`: Delete comment
-- [ ] Define `Comment` interface with author, authorType (human, agent, system), content, log
+- [x] Define `Comment` interface with author, authorType (human, agent, system), content, log
 
 ### Attachment Repository
-- [ ] Create `server/src/modules/tasks/attachment-repository.ts`
+- [x] Create `server/src/modules/tasks/attachment-repository.ts`
   - `findByTaskId(taskId)`: List attachments
   - `findById(id)`: Get single attachment
   - `create(data)`: Insert attachment record
   - `delete(id)`: Delete attachment record
-- [ ] Define `Attachment` interface with filename, storedName, mimeType, size
-- [ ] Storage location: `$HOME/.malamar/attachments/`
+- [x] Define `Attachment` interface with filename, storedName, mimeType, size
+- [x] Storage location: `$HOME/.malamar/attachments/`
 
 ### Attachment File Operations
-- [ ] Implement file save: generate stored name (nanoid + extension), write to attachments dir
-- [ ] Implement file delete: remove file from disk when attachment deleted
-- [ ] Implement file read: return file path for download
-- [ ] Copy attachment to workspace directory on task execution
+- [x] Implement file save: generate stored name (nanoid + extension), write to attachments dir
+- [x] Implement file delete: remove file from disk when attachment deleted
+- [x] Implement file read: return file path for download
+- [x] Copy attachment to workspace directory on task execution
 
 ### Task Service
-- [ ] Create `server/src/modules/tasks/service.ts`
+- [x] Create `server/src/modules/tasks/service.ts`
   - `listByWorkspace(workspaceId, filters)`: Get tasks with pagination
   - `get(id)`: Get task with comments and attachments
   - `create(workspaceId, data)`: Create task, trigger routing if status is todo
   - `update(id, data)`: Update task
   - `delete(id)`: Delete task (cleanup attachments)
   - `updateStatus(id, status)`: Status transition with validation
-- [ ] Handle comment creation triggers: re-route if status is not `done`
+- [x] Handle comment creation triggers: re-route if status is not `done`
 
 ### Comment Trigger Logic
-- [ ] When human comment added and status is `in_review` or `todo`: trigger routing
-- [ ] When human comment added and status is `done`: no action (comment only)
-- [ ] System comments (from cancellation, errors) never trigger routing
+- [x] When human comment added and status is `in_review` or `todo`: trigger routing
+- [x] When human comment added and status is `done`: no action (comment only)
+- [x] System comments (from cancellation, errors) never trigger routing
 
 ### Task Routes
-- [ ] Create `server/src/modules/tasks/routes.ts`
+- [x] Create `server/src/modules/tasks/routes.ts`
   - `GET /api/workspaces/:id/tasks`: List tasks (query: status, page, limit)
   - `POST /api/workspaces/:id/tasks`: Create task
   - `GET /api/tasks/:id`: Get task detail
@@ -233,19 +233,19 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `POST /api/tasks/:id/restart`: Restart task execution
 
 ### Comment Routes
-- [ ] Add to task routes file
+- [x] Add to task routes file
   - `GET /api/tasks/:id/comments`: List comments
   - `POST /api/tasks/:id/comments`: Add comment (triggers routing if applicable)
 
 ### Attachment Routes
-- [ ] Add to task routes file or separate
+- [x] Add to task routes file or separate
   - `GET /api/tasks/:id/attachments`: List attachments
   - `POST /api/tasks/:id/attachments`: Upload attachment (multipart form)
   - `DELETE /api/attachments/:id`: Delete attachment
   - `GET /api/attachments/:id/download`: Download attachment file
 
 ### Tasks Module Exports
-- [ ] Create `server/src/modules/tasks/index.ts`
+- [x] Create `server/src/modules/tasks/index.ts`
 
 ---
 
