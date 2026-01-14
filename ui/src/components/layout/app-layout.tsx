@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Outlet } from "react-router";
 
 import { AppSidebar } from "@/components/layout/app-sidebar.tsx";
 import {
@@ -7,7 +7,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar.tsx";
 
-export const AppLayout = ({ children }: { children: ReactNode }) => {
+export const AppLayout = () => {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -18,7 +18,9 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
           </div>
         </header>
 
-        <div className="p-4 pt-0">{children}</div>
+        <div className="p-4 pt-0">
+          <Outlet />
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

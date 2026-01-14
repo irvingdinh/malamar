@@ -1,4 +1,5 @@
-import { Settings2, SquareTerminal } from "lucide-react";
+import { SquareTerminal } from "lucide-react";
+import { Link, useLocation } from "react-router";
 
 import {
   SidebarGroup,
@@ -9,28 +10,30 @@ import {
 
 const items = [
   {
-    title: "Workspaces",
-    url: "#",
+    title: "Dashboard",
+    url: "/",
     icon: SquareTerminal,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings2,
+    isActive: (pathname: string) => pathname === "/",
   },
 ];
 
 export function NavMain() {
+  const location = useLocation();
+
   return (
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild tooltip={item.title}>
-              <a href={item.url}>
+            <SidebarMenuButton
+              asChild
+              tooltip={item.title}
+              isActive={item.isActive(location.pathname)}
+            >
+              <Link to={item.url}>
                 <item.icon />
                 <span>{item.title}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
