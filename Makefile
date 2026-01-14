@@ -1,6 +1,12 @@
-.PHONY: dev-ui dev-server build build-ui build-server build-all test clean version install
+.PHONY: dev dev-ui dev-server build build-ui build-server build-all test clean version install
 
 # Development
+dev:
+	@trap 'kill 0' SIGINT; \
+	(cd server && bun run dev) & \
+	(cd ui && bun run dev) & \
+	wait
+
 dev-ui:
 	cd ui && bun run dev
 

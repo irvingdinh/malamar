@@ -2,6 +2,7 @@ import { FerrisWheel } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/layout/nav-main.tsx";
+import { NavStatus } from "@/components/layout/nav-status.tsx";
 import {
   Sidebar,
   SidebarContent,
@@ -33,6 +34,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
+        <NavStatus />
       </SidebarContent>
       <SidebarFooter>{/* Placeholder */}</SidebarFooter>
     </Sidebar>
