@@ -474,34 +474,34 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 12: CLI Interface
 
 ### CLI Argument Parsing
-- [ ] Enhance `server/src/index.ts` with full CLI parsing
+- [x] Enhance `server/src/index.ts` with full CLI parsing
   - `--port, -p <number>`: Server port (default: 3456)
   - `--data-dir <path>`: Data directory (default: $HOME/.malamar)
   - `--tmp-dir <path>`: Temp directory (default: os.tmpdir()/malamar)
   - `--log-format <format>`: pretty, json, auto (default: auto)
   - `--log-level <level>`: debug, info, warn, error (default: info)
-- [ ] Support positional commands: `malamar [command] [options]`
+- [x] Support positional commands: `malamar [command] [options]`
 
 ### Help Command
-- [ ] Implement `malamar help` command
+- [x] Implement `malamar help` command
   - Show usage, available commands, options
   - Show examples
 
 ### Version Command
-- [ ] Implement `malamar version` command
+- [x] Implement `malamar version` command
   - Read version from package.json
   - Output: `malamar v0.0.1`
 
 ### Export Command
-- [ ] Implement `malamar export` command
+- [x] Implement `malamar export` command
   - `malamar export`: All workspaces to stdout
   - `malamar export --output backup.json`: All to file
   - `malamar export --workspace <id>`: Single workspace
-- [ ] Export format as specified in STANDALONE.md
-- [ ] Exclude: attachments, executions, execution_logs, task_routings
+- [x] Export format as specified in STANDALONE.md
+- [x] Exclude: attachments, executions, execution_logs, task_routings
 
 ### Import Command
-- [ ] Implement `malamar import <file>` command
+- [x] Implement `malamar import <file>` command
   - Read JSON file
   - Validate format version
   - On ID collision: fail with error (do not overwrite)

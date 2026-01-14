@@ -264,7 +264,7 @@ export function parseTaskOutput(outputPath: string): TaskOutput | null {
     }
 
     return parsed
-  } catch (error) {
+  } catch {
     log.debug('Task output file not found or unreadable', { outputPath })
     return null
   }
