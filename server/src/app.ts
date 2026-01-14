@@ -14,6 +14,7 @@ import { agents } from './modules/agents'
 import { workspaceTasks, tasks, attachments } from './modules/tasks'
 import { templates } from './modules/templates'
 import { executions } from './modules/executions'
+import { events } from './modules/events'
 
 const VERSION = '0.0.1'
 
@@ -74,6 +75,7 @@ app.route('/api/workspaces/:id/templates', templates)
 app.route('/api/tasks', tasks)
 app.route('/api/attachments', attachments)
 app.route('/api/executions', executions)
+app.route('/api/events', events)
 
 // Static file serving from public directory
 const publicDir = join(import.meta.dir, '../public')

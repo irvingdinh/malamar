@@ -323,31 +323,31 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 8: Events Module (SSE)
 
 ### Event Emitter
-- [ ] Create `server/src/modules/events/emitter.ts`
+- [x] Create `server/src/modules/events/emitter.ts`
   - In-memory event emitter (EventEmitter or custom)
   - `emit(type, payload)`: Broadcast event to all listeners
   - `subscribe(callback)`: Add listener, return unsubscribe function
-- [ ] Define event types in `server/src/modules/events/types.ts`
+- [x] Define event types in `server/src/modules/events/types.ts`
   - task:created, task:updated, task:deleted
   - task:comment:added
   - execution:created, execution:updated
   - routing:updated
 
 ### General Events SSE Endpoint
-- [ ] Create `server/src/modules/events/routes.ts`
+- [x] Create `server/src/modules/events/routes.ts`
   - `GET /api/events`: SSE endpoint for general events
   - Set headers: `Content-Type: text/event-stream`, `Cache-Control: no-cache`, `Connection: keep-alive`
   - Send keepalive every 30 seconds
   - Stream format: `data: {"type":"...","payload":{...}}\n\n`
 
 ### Execution Log Streaming Endpoint
-- [ ] Add execution-specific SSE route
+- [x] Add execution-specific SSE route
   - `GET /api/events/executions/:id/logs`: Stream logs for specific execution
   - Stream existing logs first, then new logs as they arrive
   - Close stream when execution completes
 
 ### Events Module Exports
-- [ ] Create `server/src/modules/events/index.ts`
+- [x] Create `server/src/modules/events/index.ts`
 
 ---
 
