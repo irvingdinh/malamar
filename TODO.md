@@ -141,27 +141,27 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 4: Agents Module
 
 ### Agent Repository
-- [ ] Create `server/src/modules/agents/repository.ts`
+- [x] Create `server/src/modules/agents/repository.ts`
   - `findByWorkspaceId(workspaceId)`: List agents ordered by `order` asc
   - `findById(id)`: Get single agent
   - `create(data)`: Insert agent (assign next order value)
   - `update(id, data)`: Update agent fields
   - `delete(id)`: Delete agent
   - `reorder(workspaceId, orderedIds)`: Update order for all agents
-- [ ] Create `server/src/modules/agents/types.ts` with `Agent` interface
+- [x] Create `server/src/modules/agents/types.ts` with `Agent` interface
 
 ### Agent Service
-- [ ] Create `server/src/modules/agents/service.ts`
+- [x] Create `server/src/modules/agents/service.ts`
   - `listByWorkspace(workspaceId)`: Get ordered agents
   - `get(id)`: Get agent (verify exists)
   - `create(workspaceId, data)`: Create agent
   - `update(id, data)`: Update agent
   - `delete(id)`: Delete agent (recompute order for remaining)
   - `reorder(workspaceId, orderedIds)`: Reorder agents
-- [ ] Validate agent belongs to workspace on operations
+- [x] Validate agent belongs to workspace on operations
 
 ### Agent Routes
-- [ ] Create `server/src/modules/agents/routes.ts`
+- [x] Create `server/src/modules/agents/routes.ts`
   - `GET /api/workspaces/:id/agents`: List agents
   - `POST /api/workspaces/:id/agents`: Create agent
   - `PUT /api/workspaces/:id/agents/:agentId`: Update agent
@@ -169,7 +169,7 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `PUT /api/workspaces/:id/agents/reorder`: Reorder agents (body: `{ orderedIds: string[] }`)
 
 ### Agent Module Exports
-- [ ] Create `server/src/modules/agents/index.ts`
+- [x] Create `server/src/modules/agents/index.ts`
 
 ---
 

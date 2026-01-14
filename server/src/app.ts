@@ -10,6 +10,7 @@ import { Hono } from 'hono'
 import { serveStatic } from 'hono/bun'
 import { isAppError, log, getConfig } from './modules/core'
 import { workspaces } from './modules/workspaces'
+import { agents } from './modules/agents'
 
 const VERSION = '0.0.1'
 
@@ -64,6 +65,7 @@ app.get('/api/health', async (c) => {
 
 // Mount API routes
 app.route('/api/workspaces', workspaces)
+app.route('/api/workspaces/:id/agents', agents)
 
 // Static file serving from public directory
 const publicDir = join(import.meta.dir, '../public')
