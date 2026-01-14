@@ -17,6 +17,7 @@ import { executions } from './modules/executions'
 import { events } from './modules/events'
 import { routing } from './modules/routing'
 import { settings } from './modules/settings'
+import { recovery } from './modules/recovery'
 
 const VERSION = '0.0.1'
 
@@ -80,6 +81,7 @@ app.route('/api/executions', executions)
 app.route('/api/events', events)
 app.route('/api/routing', routing)
 app.route('/api/settings', settings)
+app.route('/api/recovery', recovery)
 
 // Static file serving from public directory
 const publicDir = join(import.meta.dir, '../public')

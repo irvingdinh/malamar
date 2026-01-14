@@ -13,6 +13,7 @@ import {
   closeDatabase,
   log,
 } from './modules/core'
+import { recoveryService } from './modules/recovery'
 import {
   parseArgs,
   hasHelpFlag,
@@ -48,6 +49,16 @@ async function runServeCommand(args: ReturnType<typeof parseArgs>): Promise<void
 
   // Initialize database
   await initDatabase(config.dataDir)
+
+  // Recover in-progress tasks
+  try {
+    await recoveryService.recoverAll()
+  } catch (error) {
+    log.error('Failed to recover in-progress tasks', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+    // Continue startup even if recovery fails
+  }
 
   // Print banner
   printBanner(config.port, config.dataDir)

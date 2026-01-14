@@ -513,14 +513,14 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 13: Recovery & Lifecycle
 
 ### Startup Recovery
-- [ ] On server startup: query tasks with `status = 'in_progress'`
-- [ ] For each in-progress task:
+- [x] On server startup: query tasks with `status = 'in_progress'`
+- [x] For each in-progress task:
   - Check task_routings table for state
   - Resume from current_agent_index in current iteration
   - Re-trigger routing service
 
 ### Manual Recovery API
-- [ ] Add endpoint: `POST /api/recovery/trigger`
+- [x] Add endpoint: `POST /api/recovery/trigger`
   - Manually trigger recovery process
   - Return count of recovered tasks
 
