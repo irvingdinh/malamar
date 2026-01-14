@@ -283,7 +283,7 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 7: Executions Module
 
 ### Execution Repository
-- [ ] Create `server/src/modules/executions/repository.ts`
+- [x] Create `server/src/modules/executions/repository.ts`
   - `findAll(filters?)`: List executions with pagination, filter by task/status
   - `findById(id)`: Get single execution
   - `findByTaskId(taskId)`: List executions for a task
@@ -291,13 +291,13 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `update(id, data)`: Update execution (status, result, output, timestamps)
 
 ### Execution Logs Repository
-- [ ] Create log repository in same file or separate
+- [x] Create log repository in same file or separate
   - `findByExecutionId(executionId)`: Get all logs for execution
   - `append(executionId, content)`: Add log entry with timestamp
   - `deleteByExecutionId(executionId)`: Clear logs for execution
 
 ### Execution Service
-- [ ] Create `server/src/modules/executions/service.ts`
+- [x] Create `server/src/modules/executions/service.ts`
   - `list(filters)`: List executions with pagination
   - `get(id)`: Get execution with logs
   - `getByTask(taskId)`: Get executions for task
@@ -309,14 +309,14 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `analytics()`: Compute agent analytics (success rate, avg duration)
 
 ### Execution Routes
-- [ ] Create `server/src/modules/executions/routes.ts`
+- [x] Create `server/src/modules/executions/routes.ts`
   - `GET /api/executions`: List executions (query: taskId, status, page, limit)
   - `GET /api/executions/:id`: Get execution detail
   - `GET /api/executions/:id/logs`: Get execution logs
   - `GET /api/executions/analytics`: Get agent analytics
 
 ### Executions Module Exports
-- [ ] Create `server/src/modules/executions/index.ts`
+- [x] Create `server/src/modules/executions/index.ts`
 
 ---
 
