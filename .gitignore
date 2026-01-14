@@ -142,3 +142,10 @@ vite.config.ts.timestamp-*
 
 # JetBrains
 .idea
+
+# Malamar specific
+malamar
+malamar.exe
+dist/
+server/public/
+bun.lockb
