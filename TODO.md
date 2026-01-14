@@ -449,25 +449,25 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 11: Settings Module
 
 ### Global Settings Service
-- [ ] Create `server/src/modules/settings/service.ts`
+- [x] Create `server/src/modules/settings/service.ts`
   - `get()`: Read settings from config.json
   - `update(settings)`: Write settings to config.json
   - Settings: clis (array with type, path, maxConcurrent), server (port)
-- [ ] Merge with runtime config (env/CLI overrides not persisted)
+- [x] Merge with runtime config (env/CLI overrides not persisted)
 
 ### CLI Health Check
-- [ ] Implement `checkCliHealth()`: Actually execute `claude --version`
-- [ ] Return: installed (boolean), version (string if available), path
-- [ ] Cache result for short duration (5 seconds)
+- [x] Implement `checkCliHealth()`: Actually execute `claude --version`
+- [x] Return: installed (boolean), version (string if available), path
+- [x] Cache result for short duration (5 seconds)
 
 ### Settings Routes
-- [ ] Create `server/src/modules/settings/routes.ts`
+- [x] Create `server/src/modules/settings/routes.ts`
   - `GET /api/settings`: Get global settings with runtime status
   - `PUT /api/settings`: Update global settings
   - `GET /api/settings/cli/health`: On-demand CLI health check
 
 ### Settings Module Exports
-- [ ] Create `server/src/modules/settings/index.ts`
+- [x] Create `server/src/modules/settings/index.ts`
 
 ---
 
