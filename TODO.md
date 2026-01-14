@@ -67,26 +67,26 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 2: Hono App & Health
 
 ### Hono App Setup
-- [ ] Create `server/src/app.ts` with Hono app initialization
+- [x] Create `server/src/app.ts` with Hono app initialization
   - Import and compose all route modules
   - No CORS middleware (single-binary, same-origin)
   - No body size limit
-- [ ] Add request logging middleware (log method, path, status, duration)
-- [ ] Add global error handler middleware (convert errors to standard format)
+- [x] Add request logging middleware (log method, path, status, duration)
+- [x] Add global error handler middleware (convert errors to standard format)
 
 ### Health Endpoint
-- [ ] Create health route: `GET /api/health`
+- [x] Create health route: `GET /api/health`
   - Return: version, uptime (seconds), database status
   - Include CLI status: configured path, whether executable exists
-- [ ] Read version from `package.json`
+- [x] Read version from `package.json`
 
 ### Static File Serving
-- [ ] Set up static file serving from `server/public/ui/`
-- [ ] Implement SPA routing: serve `index.html` for unknown routes (non-API, non-file)
-- [ ] Handle missing UI gracefully (return message to build UI first)
+- [x] Set up static file serving from `server/public/ui/`
+- [x] Implement SPA routing: serve `index.html` for unknown routes (non-API, non-file)
+- [x] Handle missing UI gracefully (return message to build UI first)
 
 ### Entry Point
-- [ ] Create `server/src/index.ts` as main entry
+- [x] Create `server/src/index.ts` as main entry
   - Parse CLI arguments (basic: --port, --help, --version)
   - Initialize config, database, logger
   - Start Hono server
