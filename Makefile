@@ -29,10 +29,10 @@ build-all:
 
 # Testing
 test:
-	cd server && bun test
+	cd server && bun test tests/
 
 test-e2e:
-	cd server && bun test --test-name-pattern="e2e"
+	cd server && bun test e2e/
 
 # Install dependencies
 install:
