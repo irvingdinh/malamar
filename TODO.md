@@ -97,33 +97,33 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 3: Workspaces Module
 
 ### Workspace Repository
-- [ ] Create `server/src/modules/workspaces/repository.ts`
+- [x] Create `server/src/modules/workspaces/repository.ts`
   - `findAll()`: List all workspaces ordered by updated_at desc
   - `findById(id)`: Get single workspace
   - `create(data)`: Insert new workspace
   - `update(id, data)`: Update workspace
   - `delete(id)`: Delete workspace (settings, agents, tasks cascade via FK)
-- [ ] Create `server/src/modules/workspaces/types.ts` with `Workspace` interface
+- [x] Create `server/src/modules/workspaces/types.ts` with `Workspace` interface
 
 ### Workspace Settings Repository
-- [ ] Add settings repository in same file or separate
+- [x] Add settings repository in same file or separate
   - `findByWorkspaceId(workspaceId)`: Get all settings for workspace
   - `get(workspaceId, key)`: Get single setting
   - `set(workspaceId, key, value)`: Upsert setting (JSON.stringify value)
   - `delete(workspaceId, key)`: Remove setting
-- [ ] Define known settings keys: `instruction`
+- [x] Define known settings keys: `instruction`
 
 ### Workspace Service
-- [ ] Create `server/src/modules/workspaces/service.ts`
+- [x] Create `server/src/modules/workspaces/service.ts`
   - `list()`: Return workspaces with settings eager-loaded
   - `get(id)`: Return workspace with settings and agents
   - `create(data)`: Create workspace with default settings
   - `update(id, data)`: Update workspace name
   - `delete(id)`: Delete workspace (handle in-progress tasks)
-- [ ] Add validation for required fields (name)
+- [x] Add validation for required fields (name)
 
 ### Workspace Routes
-- [ ] Create `server/src/modules/workspaces/routes.ts`
+- [x] Create `server/src/modules/workspaces/routes.ts`
   - `GET /api/workspaces`: List workspaces
   - `POST /api/workspaces`: Create workspace
   - `GET /api/workspaces/:id`: Get workspace detail
@@ -134,7 +134,7 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - `DELETE /api/workspaces/:id/settings/:key`: Delete a setting
 
 ### Workspace Module Exports
-- [ ] Create `server/src/modules/workspaces/index.ts`
+- [x] Create `server/src/modules/workspaces/index.ts`
 
 ---
 
