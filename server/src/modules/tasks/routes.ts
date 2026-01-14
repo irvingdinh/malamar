@@ -118,9 +118,9 @@ tasks.delete('/:id', (c) => {
 /**
  * POST /api/tasks/:id/cancel - Cancel an in-progress task
  */
-tasks.post('/:id/cancel', (c) => {
+tasks.post('/:id/cancel', async (c) => {
   const id = c.req.param('id')!
-  const task = taskService.cancel(id)
+  const task = await taskService.cancel(id)
   return c.json(task)
 })
 

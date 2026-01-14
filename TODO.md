@@ -525,8 +525,8 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - Return count of recovered tasks
 
 ### Graceful Shutdown
-- [ ] Handle SIGTERM and SIGINT signals
-- [ ] On shutdown:
+- [x] Handle SIGTERM and SIGINT signals
+- [x] On shutdown:
   1. Stop accepting new routing triggers
   2. Wait up to 30 seconds for in-flight executions
   3. Force kill remaining processes
@@ -534,19 +534,19 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   5. Exit with code 0
 
 ### Workspace Deletion Handling
-- [ ] When workspace deleted with in-progress tasks:
+- [x] When workspace deleted with in-progress tasks:
   - Cancel all running executions for that workspace
   - Wait for processes to terminate
   - Then delete (cascade will clean up records)
-- [ ] Add query param: `DELETE /api/workspaces/:id?force=true`
+- [x] Add query param: `DELETE /api/workspaces/:id?force=true`
 
 ### Task Cancellation
-- [ ] `POST /api/tasks/:id/cancel`:
+- [x] `POST /api/tasks/:id/cancel`:
   - Kill running CLI process for task
   - Set task status back to `todo`
   - Add system comment: "Task cancelled by user"
   - Update routing state to failed
-- [ ] Handle case where task is not in_progress
+- [x] Handle case where task is not in_progress
 
 ---
 

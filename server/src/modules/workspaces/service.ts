@@ -4,8 +4,11 @@
  * Business logic for workspace operations.
  */
 
-import { NotFoundError, ValidationError } from '../core'
+import { NotFoundError, ValidationError, ConflictError, log } from '../core'
 import { workspaceRepository, settingsRepository } from './repository'
+import { taskRepository } from '../tasks/repository'
+import { executorService } from '../executor/service'
+import { routingService } from '../routing/service'
 import type {
   WorkspaceWithSettings,
   CreateWorkspaceInput,
@@ -89,15 +92,43 @@ export const workspaceService = {
 
   /**
    * Delete a workspace
+   * @param id - Workspace ID
+   * @param force - If true, cancel in-progress tasks before deletion
    */
-  delete(id: string): void {
+  async delete(id: string, force: boolean = false): Promise<void> {
     const exists = workspaceRepository.findById(id)
     if (!exists) {
       throw new NotFoundError(`Workspace not found: ${id}`)
     }
 
-    // TODO: Cancel any in-progress tasks before deletion
-    // This will be implemented when the executor module is ready
+    // Check for in-progress tasks
+    const inProgressTasks = taskRepository.findByWorkspaceId(id, {
+      status: 'in_progress',
+    })
+
+    if (inProgressTasks.length > 0) {
+      if (!force) {
+        throw new ConflictError(
+          `Cannot delete workspace with ${inProgressTasks.length} in-progress task(s). Use force=true to cancel them.`,
+          { inProgressTaskCount: inProgressTasks.length }
+        )
+      }
+
+      // Force mode: cancel all running executions for this workspace
+      log.info('Force deleting workspace with in-progress tasks', {
+        workspaceId: id,
+        taskCount: inProgressTasks.length,
+      })
+
+      for (const task of inProgressTasks) {
+        // Cancel routing and executions for each task
+        await routingService.cancel(task.id)
+        executorService.cancelByTask(task.id)
+      }
+
+      // Small delay to allow processes to terminate
+      await new Promise((resolve) => setTimeout(resolve, 500))
+    }
 
     workspaceRepository.delete(id)
   },

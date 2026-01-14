@@ -10,10 +10,10 @@ import {
   initConfig,
   initLogger,
   initDatabase,
-  closeDatabase,
   log,
 } from './modules/core'
 import { recoveryService } from './modules/recovery'
+import { lifecycleService } from './modules/lifecycle'
 import {
   parseArgs,
   hasHelpFlag,
@@ -64,14 +64,8 @@ async function runServeCommand(args: ReturnType<typeof parseArgs>): Promise<void
   printBanner(config.port, config.dataDir)
 
   // Handle graceful shutdown
-  const shutdown = async () => {
-    log.info('Shutting down...')
-    closeDatabase()
-    process.exit(0)
-  }
-
-  process.on('SIGTERM', shutdown)
-  process.on('SIGINT', shutdown)
+  process.on('SIGTERM', () => lifecycleService.gracefulShutdown())
+  process.on('SIGINT', () => lifecycleService.gracefulShutdown())
 
   // Start server
   serve({

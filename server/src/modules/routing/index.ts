@@ -5,7 +5,7 @@
  */
 
 export { routing } from './routes'
-export { routingService } from './service'
+export { routingService, setLifecycleChecker } from './service'
 export { routingRepository } from './repository'
 export type {
   TaskRouting,

@@ -4,7 +4,7 @@
  * Business logic for task operations.
  */
 
-import { NotFoundError, ValidationError } from '../core'
+import { NotFoundError, ValidationError, log } from '../core'
 import { workspaceRepository } from '../workspaces/repository'
 import { taskRepository } from './repository'
 import { commentRepository } from './comment-repository'
@@ -14,6 +14,8 @@ import {
   saveAttachmentFile,
   getAttachmentPath,
 } from './attachment-repository'
+import { routingService } from '../routing/service'
+import { executorService } from '../executor/service'
 import type {
   Task,
   TaskWithDetails,
@@ -190,8 +192,12 @@ export const taskService = {
 
   /**
    * Cancel an in-progress task
+   * - Kills running CLI process for task
+   * - Sets task status back to todo
+   * - Adds system comment: "Task cancelled by user"
+   * - Updates routing state to failed
    */
-  cancel(id: string): Task {
+  async cancel(id: string): Promise<Task> {
     const task = taskRepository.findById(id)
     if (!task) {
       throw new NotFoundError(`Task not found: ${id}`)
@@ -203,20 +209,22 @@ export const taskService = {
       })
     }
 
-    // Add system comment noting cancellation
-    commentRepository.create(id, {
-      author: 'system',
-      authorType: 'system',
-      content: 'Task cancelled by user',
-    })
+    log.info('Cancelling task', { taskId: id })
 
-    // Set task status back to todo
-    const updated = taskRepository.updateStatus(id, 'todo')
+    // Cancel routing (this will kill processes and update routing state to failed)
+    await routingService.cancel(id)
+
+    // Also explicitly cancel any running executions for this task
+    const cancelledCount = executorService.cancelByTask(id)
+    if (cancelledCount > 0) {
+      log.info('Cancelled running executions', { taskId: id, count: cancelledCount })
+    }
+
+    // Fetch the updated task (routing.cancel already updates status and adds comment)
+    const updated = taskRepository.findById(id)
     if (!updated) {
       throw new NotFoundError(`Task not found: ${id}`)
     }
-
-    // TODO: Kill running execution process (will be implemented in executor module)
 
     return updated
   },

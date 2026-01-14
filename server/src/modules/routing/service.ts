@@ -14,7 +14,7 @@
  * 6. CLI crash: retry up to 3 times, then continue to next agent
  */
 
-import { NotFoundError, log } from '../core'
+import { NotFoundError, ValidationError, log } from '../core'
 import { taskRepository } from '../tasks/repository'
 import { agentRepository } from '../agents/repository'
 import { commentRepository } from '../tasks/comment-repository'
@@ -24,6 +24,21 @@ import { emitRoutingUpdated, emitExecutionCreated, emitTaskUpdated } from '../ev
 import { routingRepository } from './repository'
 import type { TaskRouting, RoutingListFilters } from './types'
 import type { Agent } from '../agents/types'
+
+// Lifecycle service interface to avoid circular dependency
+interface LifecycleChecker {
+  isAcceptingRoutings: () => boolean
+}
+
+// Lifecycle checker is set externally to avoid circular dependency
+let _lifecycleChecker: LifecycleChecker | null = null
+
+/**
+ * Set the lifecycle checker (called from lifecycle service during initialization)
+ */
+export function setLifecycleChecker(checker: LifecycleChecker): void {
+  _lifecycleChecker = checker
+}
 
 // Maximum number of retries for a single agent
 const MAX_RETRIES = 3
@@ -59,6 +74,11 @@ export const routingService = {
    * Creates or resumes routing state and starts execution
    */
   async trigger(taskId: string): Promise<TaskRouting> {
+    // Check if server is accepting new routings (during shutdown, it won't)
+    if (_lifecycleChecker && !_lifecycleChecker.isAcceptingRoutings()) {
+      throw new ValidationError('Server is shutting down, not accepting new routing triggers')
+    }
+
     // Verify task exists
     const task = taskRepository.findById(taskId)
     if (!task) {

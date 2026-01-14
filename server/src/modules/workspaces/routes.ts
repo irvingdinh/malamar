@@ -47,10 +47,13 @@ workspaces.put('/:id', async (c) => {
 
 /**
  * DELETE /api/workspaces/:id - Delete a workspace
+ * Query params:
+ *   - force: If true, cancel in-progress tasks before deletion
  */
-workspaces.delete('/:id', (c) => {
+workspaces.delete('/:id', async (c) => {
   const id = c.req.param('id')
-  workspaceService.delete(id)
+  const force = c.req.query('force') === 'true'
+  await workspaceService.delete(id, force)
   return c.body(null, 204)
 })
 
