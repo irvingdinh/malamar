@@ -156,12 +156,27 @@ make build       # Single binary
 make build-all   # Cross-platform builds
 ```
 
+## Web UI
+
+Malamar includes an optional web interface for managing workspaces, agents, and tasks.
+
+See [ui/README.md](./ui/README.md) for UI-specific documentation.
+
+### Quick Start (UI Development)
+
+```bash
+cd ui
+bun install
+bun run dev
+# UI available at http://localhost:5173
+```
+
 ## Roadmap
 
 - [ ] Multi-CLI adapters (Gemini CLI, OpenAI Codex CLI, OpenCode)
 - [ ] Per-agent CLI selection (mix different AI tools in one workflow)
 - [ ] Scheduled/cron task triggers
-- [ ] Web UI dashboard
+- [x] Web UI dashboard (in progress)
 
 ## License
 

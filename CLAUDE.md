@@ -118,6 +118,56 @@ Agents will support per-agent CLI selection, allowing different AI tools in the 
 - `server/src/modules/executor/adapters/claude.ts` - Claude Code CLI adapter
 - `server/src/modules/routing/service.ts` - Convergence loop logic
 
+## Web UI (ui/)
+
+### Tech Stack
+- React 19 + TypeScript + Vite
+- TailwindCSS 4 + shadcn/ui
+- React Router 7 (Data Mode)
+
+### Project Structure (ui/src/)
+- `main.tsx` - Entry point with RouterProvider
+- `router.tsx` - Route configuration
+- `components/layout/` - AppLayout, AppSidebar, NavMain
+- `components/ui/` - shadcn/ui components
+- `pages/` - Page components
+- `hooks/` - Custom hooks (API, real-time)
+- `lib/` - Utilities, API client
+
+### Key Patterns
+
+**Layout Pattern:**
+- AppLayout wraps all routes with sidebar + header
+- Uses React Router's `<Outlet />` for nested routes
+
+**API Integration:**
+- Fetch wrapper with base URL configuration
+- Custom hooks per domain (useWorkspaces, useTasks, etc.)
+- Server state via TanStack Query (recommended)
+
+**Real-time Updates:**
+- SSE connection to `/api/events` for global events
+- SSE connection to `/api/events/executions/:id/logs` for execution logs
+- EventSource API with reconnection handling
+
+**Component Conventions:**
+- Pages in `pages/` directory, named `*-page.tsx`
+- Feature components in `components/features/`
+- Reusable UI in `components/ui/` (shadcn/ui)
+
+### Commands
+```bash
+cd ui
+bun run dev      # Development server
+bun run build    # Production build
+bun run lint     # ESLint
+bun run preview  # Preview production build
+```
+
+### Build Pipeline
+UI assets are built and embedded into the server binary during `make build`.
+The server serves static files from the embedded filesystem at `/`.
+
 ## Testing
 
 - **Integration tests** (`server/tests/`) - Use `app.fetch()` directly, no real server
@@ -165,7 +215,9 @@ Options:
 
 ### Future
 - **Scheduled Tasks**: Cron-style task triggers for automated workflows
-- **Web UI**: Dashboard for monitoring and management (being built separately)
+
+### In Progress
+- **Web UI**: Dashboard for full management and real-time monitoring (see `ui/` directory)
 
 ### Intentionally Deferred
 These are consciously out of scope to maintain simplicity:
