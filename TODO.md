@@ -399,22 +399,22 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 ## Phase 10: Routing Module
 
 ### Task Routing Repository
-- [ ] Create `server/src/modules/routing/repository.ts`
+- [x] Create `server/src/modules/routing/repository.ts`
   - `findByTaskId(taskId)`: Get routing state for task
   - `create(taskId)`: Create initial routing state
   - `update(taskId, data)`: Update routing state
   - `delete(taskId)`: Delete routing state
   - `findPending()`: Find tasks with pending/executing routing
-- [ ] Define `TaskRouting` interface with status, currentAgentIndex, iteration, anyAgentWorked, lockedAt, retryCount
+- [x] Define `TaskRouting` interface with status, currentAgentIndex, iteration, anyAgentWorked, lockedAt, retryCount
 
 ### Routing Service
-- [ ] Create `server/src/modules/routing/service.ts`
+- [x] Create `server/src/modules/routing/service.ts`
   - `trigger(taskId)`: Start or resume task routing
     1. Create/update routing state
     2. Set task status to in_progress
     3. Lock routing
     4. Start execution loop
-- [ ] Implement sequential execution loop
+- [x] Implement sequential execution loop
   - Execute agents in order (0 to N-1)
   - Track anyAgentWorked flag per iteration
   - On completion of all agents: check anyAgentWorked
@@ -422,27 +422,27 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
   - If not worked: complete routing, set task to in_review
 
 ### Handle Agent Results
-- [ ] `skip`: Continue to next agent, no flag change
-- [ ] `comment`: Set anyAgentWorked=true, create comment record with log
-- [ ] `error`: Handle with retry logic
+- [x] `skip`: Continue to next agent, no flag change
+- [x] `comment`: Set anyAgentWorked=true, create comment record with log
+- [x] `error`: Handle with retry logic
 
 ### Agent Timeout Handling
-- [ ] When agent times out: kill process, counts as "worked" (anyAgentWorked=true)
-- [ ] Add system comment noting timeout
-- [ ] Continue to next agent
+- [x] When agent times out: kill process, counts as "worked" (anyAgentWorked=true)
+- [x] Add system comment noting timeout
+- [x] Continue to next agent
 
 ### Retry Logic
-- [ ] On CLI crash (non-timeout): retry immediately up to 3 times
-- [ ] After 3 retries: mark execution as failed, add error comment
-- [ ] Continue to next agent (do not block on single agent failure)
+- [x] On CLI crash (non-timeout): retry immediately up to 3 times
+- [x] After 3 retries: mark execution as failed, add error comment
+- [x] Continue to next agent (do not block on single agent failure)
 
 ### Integration with Executor
-- [ ] Call executor.execute() for each agent
-- [ ] Handle execution results and errors
-- [ ] Emit routing:updated events for UI updates
+- [x] Call executor.execute() for each agent
+- [x] Handle execution results and errors
+- [x] Emit routing:updated events for UI updates
 
 ### Routing Module Exports
-- [ ] Create `server/src/modules/routing/index.ts`
+- [x] Create `server/src/modules/routing/index.ts`
 
 ---
 
