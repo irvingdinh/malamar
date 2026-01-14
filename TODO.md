@@ -15,52 +15,52 @@ See [STANDALONE.md](./STANDALONE.md) for full specification.
 - [x] Add `.gitignore` entries for `malamar`, `dist/`, `server/public/ui/`
 
 ### Core Module: Config
-- [ ] Create `server/src/modules/core/config.ts` with config loading
+- [x] Create `server/src/modules/core/config.ts` with config loading
   - Load from env vars, CLI args, and `$HOME/.malamar/config.json`
   - Priority: ENV > CLI flags > config.json > Defaults
   - Supported options: port, dataDir, tmpDir, logFormat, logLevel, claudePath
-- [ ] Create `server/src/modules/core/types.ts` with `Config` interface
+- [x] Create `server/src/modules/core/types.ts` with `Config` interface
 
 ### Core Module: Database
-- [ ] Create `server/src/modules/core/database.ts` with SQLite setup
+- [x] Create `server/src/modules/core/database.ts` with SQLite setup
   - Initialize `bun:sqlite` database at `$HOME/.malamar/malamar.db`
   - Ensure data directory exists
   - Enable WAL mode for better concurrency
-- [ ] Add database busy handling with exponential backoff (100ms, 200ms, 400ms, max 3 retries)
+- [x] Add database busy handling with exponential backoff (100ms, 200ms, 400ms, max 3 retries)
 
 ### Core Module: Migration Runner
-- [ ] Create `server/migrations/` directory structure
-- [ ] Implement migration runner in `database.ts`
+- [x] Create `server/migrations/` directory structure
+- [x] Implement migration runner in `database.ts`
   - Track applied migrations in `_migrations` table
   - Run migrations in order by filename (timestamp-based: `001_initial.sql`)
   - No rollback support (forward-only)
-- [ ] Create `server/migrations/001_initial.sql` with all tables and indexes
+- [x] Create `server/migrations/001_initial.sql` with all tables and indexes
   - Tables: workspaces, workspace_settings, agents, tasks, task_routings, comments, attachments, executions, execution_logs, task_templates, _migrations
   - All indexes as specified in STANDALONE.md
 
 ### Core Module: Logger
-- [ ] Create `server/src/modules/core/logger.ts`
+- [x] Create `server/src/modules/core/logger.ts`
   - Pretty format: `[2025-01-14 12:00:00] INFO  Message here`
   - JSON format: `{"level":"info","time":"...","msg":"..."}`
   - Auto format: detect TTY and choose pretty/json
-- [ ] Support log levels: debug, info, warn, error
-- [ ] Export logger instance and log functions
+- [x] Support log levels: debug, info, warn, error
+- [x] Export logger instance and log functions
 
 ### Core Module: Errors
-- [ ] Create `server/src/modules/core/errors.ts`
+- [x] Create `server/src/modules/core/errors.ts`
   - Define `AppError` base class with status code and error code
   - Create specific errors: `NotFoundError`, `ValidationError`, `ConflictError`, `DatabaseError`
-- [ ] Define standard error response format: `{ error: { code, message, details? } }`
+- [x] Define standard error response format: `{ error: { code, message, details? } }`
 
 ### Core Module: Utilities
-- [ ] Create `server/src/modules/core/utils.ts`
+- [x] Create `server/src/modules/core/utils.ts`
   - ID generation with nanoid (plain IDs, no prefixes)
   - Timestamp utilities (current time in milliseconds)
   - Cross-platform temp path resolution via `os.tmpdir()`
   - JSON-safe parsing helper
 
 ### Core Module: Exports
-- [ ] Create `server/src/modules/core/index.ts` with module exports
+- [x] Create `server/src/modules/core/index.ts` with module exports
 
 ---
 
