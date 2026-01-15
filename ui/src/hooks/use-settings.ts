@@ -6,6 +6,7 @@ export interface CliConfig {
   name: string;
   type: string;
   path: string | null;
+  maxConcurrent?: number | null;
 }
 
 export interface ServerConfig {

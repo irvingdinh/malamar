@@ -1,6 +1,7 @@
 import { Cog, Terminal } from "lucide-react";
 
 import { SettingsCli } from "@/components/features/settings-cli";
+import { SettingsGlobal } from "@/components/features/settings-global";
 import { AppLayout } from "@/components/layout/app-layout";
 import {
   Card,
@@ -48,13 +49,11 @@ export function SettingsPage() {
                 Global Settings
               </CardTitle>
               <CardDescription>
-                Configure execution limits and default timeout values
+                Configure execution limits and other global options
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Global settings will be added in Commit 7.3
-              </p>
+              <SettingsGlobal />
             </CardContent>
           </Card>
         </div>
