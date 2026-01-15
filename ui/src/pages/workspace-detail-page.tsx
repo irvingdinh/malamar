@@ -1,6 +1,7 @@
 import { AlertCircle, ListTodo, Settings, Users } from "lucide-react";
 import { useParams } from "react-router";
 
+import { AgentsList } from "@/components/features/agents-list";
 import { WorkspaceHeader } from "@/components/features/workspace-header";
 import { WorkspaceSettingsTab } from "@/components/features/workspace-settings-tab";
 import { AppLayout } from "@/components/layout/app-layout";
@@ -87,15 +88,7 @@ export function WorkspaceDetailPage() {
           </TabsList>
 
           <TabsContent value="agents" className="mt-6">
-            <div className="rounded-lg border p-6">
-              <h3 className="text-lg font-medium">Agents</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Configure agents that process tasks in this workspace.
-              </p>
-              <div className="mt-4 text-sm text-muted-foreground">
-                Agent management coming soon...
-              </div>
-            </div>
+            <AgentsList workspaceId={workspace.id} />
           </TabsContent>
 
           <TabsContent value="tasks" className="mt-6">
