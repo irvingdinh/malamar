@@ -1,13 +1,17 @@
 import { AlertCircle, BarChart3, TrendingUp, Users } from "lucide-react";
 
+import { ExecutionTrendsChart } from "@/components/features/execution-trends-chart";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useExecutionAnalytics } from "@/hooks/use-executions";
+import { useExecutionAnalytics, useExecutions } from "@/hooks/use-executions";
 
 export function AnalyticsPage() {
   const { data: analytics, isLoading, isError, error } = useExecutionAnalytics();
+  const { data: executionsData, isLoading: isExecutionsLoading } = useExecutions({
+    limit: 500, // Get recent executions for trends chart
+  });
 
   // Calculate summary stats from analytics data
   const totalExecutions =
@@ -117,16 +121,17 @@ export function AnalyticsPage() {
           </Card>
         </div>
 
-        {/* Charts Grid - Placeholder for future chart components */}
+        {/* Charts Grid */}
         <div className="grid gap-6 lg:grid-cols-2">
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Execution Trends</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-                Execution trends chart will be added here
-              </div>
+              <ExecutionTrendsChart
+                executions={executionsData?.executions ?? []}
+                isLoading={isExecutionsLoading}
+              />
             </CardContent>
           </Card>
 
