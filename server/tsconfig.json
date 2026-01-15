@@ -17,9 +17,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "types": ["bun-types"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "dist"]
 }

@@ -167,8 +167,56 @@ bun run preview  # Preview production build
 ```
 
 ### Build Pipeline
-UI assets are built and embedded into the server binary during `make build`.
-The server serves static files from the embedded filesystem at `/`.
+
+UI assets are embedded into the server binary during `make build`:
+
+```
+make build
+├── build-ui: Compile React app → ui/dist/
+├── copy: ui/dist/ → server/public/
+├── generate: scripts/generate-ui-imports.ts → imports.ts
+└── compile: bun build --compile → ./malamar
+```
+
+### UI Embedding Strategy
+
+Malamar embeds UI assets directly into the compiled binary for zero-configuration deployment.
+
+**Why embed instead of serve from filesystem?**
+- Single-binary distribution (no separate static files to deploy)
+- Follows the Pocketbase model of self-contained executables
+- Simplifies deployment and reduces operational complexity
+
+**How Bun embedding works:**
+1. Files imported with `{ type: 'file' }` attribute are embedded in binary
+2. At runtime, accessible via `Bun.embeddedFiles` (array of Blobs)
+3. Bun transforms filenames: `index.css` → `index-bunhash.css`
+
+**Implementation:**
+```
+server/src/modules/ui/
+├── imports.ts        # Import declarations (auto-generated during build)
+├── embedded-assets.ts # Runtime lookup via Bun.embeddedFiles
+├── routes.ts         # HTTP handlers with dual-mode support
+└── index.ts          # Module exports
+```
+
+**Dual-mode serving:**
+- **Production**: Binary has embedded files → serve from `Bun.embeddedFiles`
+- **Development**: No embedded files → fallback to filesystem (`server/public/`)
+
+**File matching strategy:**
+Bun adds hash to embedded filenames, so we match by stem + extension:
+```
+Request: /assets/index-C60Fuvxw.css
+Embedded: index-C60Fuvxw-bunhash.css
+Match: startsWith("index-C60Fuvxw") && endsWith(".css")
+```
+
+**Developer experience:**
+- `imports.ts` placeholder is checked into git (TypeScript compiles on fresh clone)
+- Build overwrites with actual import statements
+- `bun run dev` works without running build first
 
 ## Testing
 

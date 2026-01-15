@@ -5,9 +5,7 @@
  */
 
 import { existsSync } from 'node:fs'
-import { extname, join } from 'node:path'
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/bun'
 import { isAppError, log, getConfig } from './modules/core'
 import { workspaces } from './modules/workspaces'
 import { agents } from './modules/agents'
@@ -18,6 +16,7 @@ import { events } from './modules/events'
 import { routing } from './modules/routing'
 import { settings } from './modules/settings'
 import { recovery } from './modules/recovery'
+import { ui } from './modules/ui'
 
 const VERSION = '0.0.1'
 
@@ -83,61 +82,8 @@ app.route('/api/routing', routing)
 app.route('/api/settings', settings)
 app.route('/api/recovery', recovery)
 
-// Static file serving from public directory
-const publicDir = join(import.meta.dir, '../public')
-
-// Check if public directory exists and has index.html
-function hasUI(): boolean {
-  return existsSync(join(publicDir, 'index.html'))
-}
-
-// Serve static files if they exist
-app.use('/*', async (c, next) => {
-  const path = c.req.path
-
-  // Skip API routes
-  if (path.startsWith('/api/')) {
-    return next()
-  }
-
-  // Check if this is a file request (has extension)
-  const ext = extname(path)
-  if (ext && hasUI()) {
-    // Try to serve the static file
-    const staticMiddleware = serveStatic({ root: publicDir })
-    const response = await staticMiddleware(c, next)
-    if (response) {
-      return response
-    }
-  }
-
-  return next()
-})
-
-// SPA fallback - serve index.html for non-API, non-file routes
-app.get('*', async (c) => {
-  const path = c.req.path
-
-  // Skip API routes
-  if (path.startsWith('/api/')) {
-    return c.json(
-      { error: { code: 'NOT_FOUND', message: 'Endpoint not found' } },
-      404
-    )
-  }
-
-  // Serve index.html if UI is built
-  if (hasUI()) {
-    const indexPath = join(publicDir, 'index.html')
-    const file = Bun.file(indexPath)
-    return new Response(file, {
-      headers: { 'Content-Type': 'text/html' },
-    })
-  }
-
-  // UI not built - return placeholder message
-  return c.text('Malamar Server - Build UI first to see the dashboard')
-})
+// UI static file serving (embedded in binary or from filesystem)
+app.route('/', ui)
 
 // 404 handler for API routes
 app.notFound((c) => {

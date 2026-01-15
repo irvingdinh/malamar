@@ -14,18 +14,19 @@ dev-server:
 	cd server && bun run dev
 
 # Build
-build: build-server
+build: build-ui build-server
 
 build-ui:
 	cd ui && bun run build
 	rm -rf server/public
 	cp -r ui/dist server/public
+	cd server && bun run scripts/generate-ui-imports.ts
 
 build-server:
 	cd server && bun build --compile --outfile ../malamar ./src/index.ts
 
 # Cross-platform builds
-build-all:
+build-all: build-ui
 	@mkdir -p dist
 	cd server && bun build --compile --target=bun-darwin-arm64 --outfile ../dist/malamar-darwin-arm64 ./src/index.ts
 	cd server && bun build --compile --target=bun-darwin-x64 --outfile ../dist/malamar-darwin-x64 ./src/index.ts
