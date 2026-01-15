@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalEvents } from "@/hooks/use-global-events";
 import { useTaskComments } from "@/hooks/use-tasks";
 
+import { CommentForm } from "./comment-form";
 import { CommentItem } from "./comment-item";
 
 interface TaskCommentsProps {
@@ -46,23 +47,27 @@ export function TaskComments({ taskId }: TaskCommentsProps) {
     );
   }
 
-  if (!comments || comments.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-8 text-center">
-        <MessageSquare className="mb-2 size-8 text-muted-foreground/50" />
-        <p className="text-sm text-muted-foreground">No comments yet</p>
-        <p className="text-xs text-muted-foreground">
-          Comments from agents and humans will appear here
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-3">
-      {comments.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} />
-      ))}
+    <div className="space-y-4">
+      {/* Comment form at top */}
+      <CommentForm taskId={taskId} />
+
+      {/* Comments list */}
+      {!comments || comments.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <MessageSquare className="mb-2 size-8 text-muted-foreground/50" />
+          <p className="text-sm text-muted-foreground">No comments yet</p>
+          <p className="text-xs text-muted-foreground">
+            Comments from agents and humans will appear here
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {comments.map((comment) => (
+            <CommentItem key={comment.id} comment={comment} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
