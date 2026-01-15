@@ -1,10 +1,11 @@
 import "xterm/css/xterm.css";
 
-import { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 
 import { Button } from "@/components/ui/button";
+import { useExecutionLogStream } from "@/hooks/use-execution-logs";
 import { cn } from "@/lib/utils";
 
 export interface TerminalLogViewerRef {
@@ -181,170 +182,6 @@ export interface StreamingTerminalProps {
   onComplete?: (status: string, result?: string) => void;
 }
 
-type StreamStatus = "connecting" | "connected" | "completed" | "error";
-
-interface StreamState {
-  logs: string[];
-  status: StreamStatus;
-  error: string | null;
-  reconnectAttempts: number;
-}
-
-const MAX_RECONNECT_ATTEMPTS = 5;
-const RECONNECT_INTERVAL = 3000;
-
-interface UseExecutionLogStreamResult extends StreamState {
-  reconnect: () => void;
-}
-
-function useExecutionLogStream(
-  executionId: string,
-  onComplete?: (status: string, result?: string) => void,
-  onReconnect?: () => void,
-): UseExecutionLogStreamResult {
-  const [state, setState] = useState<StreamState>({
-    logs: [],
-    status: "connecting",
-    error: null,
-    reconnectAttempts: 0,
-  });
-  const eventSourceRef = useRef<EventSource | null>(null);
-  const onCompleteRef = useRef(onComplete);
-  const onReconnectRef = useRef(onReconnect);
-  const connectRef = useRef<() => void>(() => {});
-  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
-  );
-
-  // Keep refs updated
-  useEffect(() => {
-    onCompleteRef.current = onComplete;
-    onReconnectRef.current = onReconnect;
-  }, [onComplete, onReconnect]);
-
-  // Cleanup reconnect timeout
-  const clearReconnectTimeout = useCallback(() => {
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
-  }, []);
-
-  // Connect to SSE log stream
-  useEffect(() => {
-    if (!executionId) return;
-
-    const connect = (isReconnect = false) => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-      }
-      clearReconnectTimeout();
-
-      if (isReconnect) {
-        // Clear terminal on reconnect to avoid duplicates
-        onReconnectRef.current?.();
-        setState((prev) => ({
-          logs: [],
-          status: "connecting",
-          error: null,
-          reconnectAttempts: prev.reconnectAttempts,
-        }));
-      } else {
-        setState({ logs: [], status: "connecting", error: null, reconnectAttempts: 0 });
-      }
-
-      const url = `/api/events/executions/${executionId}/logs`;
-      const eventSource = new EventSource(url);
-      eventSourceRef.current = eventSource;
-
-      eventSource.onopen = () => {
-        setState((prev) => ({ ...prev, status: "connected", reconnectAttempts: 0 }));
-      };
-
-      eventSource.addEventListener("log", (event: MessageEvent) => {
-        try {
-          const data = JSON.parse(event.data) as { content: string };
-          setState((prev) => ({ ...prev, logs: [...prev.logs, data.content] }));
-        } catch {
-          // Ignore parsing errors
-        }
-      });
-
-      eventSource.addEventListener("complete", (event: MessageEvent) => {
-        try {
-          const data = JSON.parse(event.data) as {
-            status: string;
-            result?: string;
-          };
-          setState((prev) => ({ ...prev, status: "completed" }));
-          onCompleteRef.current?.(data.status, data.result);
-          eventSource.close();
-        } catch {
-          // Ignore parsing errors
-        }
-      });
-
-      eventSource.addEventListener("keepalive", () => {
-        // Keepalive received, connection is alive
-      });
-
-      eventSource.onerror = () => {
-        if (eventSource.readyState === EventSource.CLOSED) {
-          setState((prev) => {
-            // Only attempt reconnect if not completed
-            if (prev.status === "completed") {
-              return prev;
-            }
-
-            // Check if we should auto-reconnect
-            if (prev.reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-              // Schedule reconnect
-              reconnectTimeoutRef.current = setTimeout(() => {
-                connect(true);
-              }, RECONNECT_INTERVAL);
-
-              return {
-                ...prev,
-                status: "connecting",
-                error: `Reconnecting... (attempt ${prev.reconnectAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
-                reconnectAttempts: prev.reconnectAttempts + 1,
-              };
-            }
-
-            return {
-              ...prev,
-              status: "error",
-              error: "Connection lost. Max reconnection attempts reached.",
-            };
-          });
-        }
-      };
-    };
-
-    connectRef.current = () => connect(true);
-    connect(false);
-
-    return () => {
-      clearReconnectTimeout();
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        eventSourceRef.current = null;
-      }
-    };
-  }, [executionId, clearReconnectTimeout]);
-
-  const reconnect = useCallback(() => {
-    // Reset reconnect attempts for manual reconnect
-    setState((prev) => ({ ...prev, reconnectAttempts: 0 }));
-    connectRef.current();
-  }, []);
-
-  return {
-    ...state,
-    reconnect,
-  };
-}
-
 export function StreamingTerminal({
   executionId,
   className,
@@ -360,7 +197,10 @@ export function StreamingTerminal({
   }, []);
 
   const { logs, status, error, reconnect, reconnectAttempts } =
-    useExecutionLogStream(executionId, onComplete, handleReconnect);
+    useExecutionLogStream(executionId, {
+      onComplete,
+      onReconnect: handleReconnect,
+    });
 
   return (
     <div className="flex flex-col gap-2">
@@ -392,7 +232,12 @@ export function StreamingTerminal({
         <div className="flex items-center gap-2 text-sm text-destructive">
           <div className="size-2 rounded-full bg-red-500" />
           {error}
-          <Button variant="link" size="sm" onClick={reconnect} className="ml-2 h-auto p-0">
+          <Button
+            variant="link"
+            size="sm"
+            onClick={reconnect}
+            className="ml-2 h-auto p-0"
+          >
             Reconnect
           </Button>
         </div>
