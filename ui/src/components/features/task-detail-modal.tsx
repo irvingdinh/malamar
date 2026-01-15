@@ -14,6 +14,8 @@ import type { TaskStatus } from "@/hooks/use-tasks";
 import { useTask } from "@/hooks/use-tasks";
 import { cn } from "@/lib/utils";
 
+import { TaskInfo } from "./task-info";
+
 const statusConfig: Record<TaskStatus, { label: string; className: string }> = {
   todo: {
     label: "To Do",
@@ -103,21 +105,9 @@ export function TaskDetailModal() {
             </SheetHeader>
 
             <div className="flex-1 overflow-y-auto px-4 pb-4">
-              {/* Task description placeholder */}
-              {task.description ? (
-                <div className="prose prose-sm dark:prose-invert max-w-none">
-                  <p className="text-muted-foreground whitespace-pre-wrap">
-                    {task.description}
-                  </p>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">
-                  No description provided.
-                </p>
-              )}
+              <TaskInfo task={task} />
 
               {/* Additional sections will be added in subsequent commits */}
-              {/* Commit 5.2: Task Info Section with edit form */}
               {/* Commit 5.3: Comments section */}
               {/* Commit 5.5: Attachments section */}
               {/* Commit 5.7: Task Actions */}
