@@ -14,6 +14,7 @@ import type { TaskStatus } from "@/hooks/use-tasks";
 import { useTask } from "@/hooks/use-tasks";
 import { cn } from "@/lib/utils";
 
+import { TaskActions } from "./task-actions";
 import { TaskAttachments } from "./task-attachments";
 import { TaskComments } from "./task-comments";
 import { TaskInfo } from "./task-info";
@@ -121,8 +122,10 @@ export function TaskDetailModal() {
                 <TaskAttachments taskId={task.id} />
               </section>
 
-              {/* Additional sections will be added in subsequent commits */}
-              {/* Commit 5.7: Task Actions */}
+              {/* Actions Section */}
+              <section className="border-t pt-4">
+                <TaskActions task={task} onClose={handleClose} />
+              </section>
             </div>
           </>
         )}
