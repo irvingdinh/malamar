@@ -1,7 +1,14 @@
 import { Cog, Terminal } from "lucide-react";
 
+import { SettingsCli } from "@/components/features/settings-cli";
 import { AppLayout } from "@/components/layout/app-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export function SettingsPage() {
   return (
@@ -29,9 +36,7 @@ export function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                CLI Configuration settings will be added in Commit 7.2
-              </p>
+              <SettingsCli />
             </CardContent>
           </Card>
 
