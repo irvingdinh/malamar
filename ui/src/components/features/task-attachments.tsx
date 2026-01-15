@@ -1,10 +1,11 @@
-import { AlertCircle, Paperclip } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTaskAttachments } from "@/hooks/use-tasks";
 
 import { AttachmentItem } from "./attachment-item";
+import { FileUpload } from "./file-upload";
 
 interface TaskAttachmentsProps {
   taskId: string;
@@ -29,23 +30,19 @@ export function TaskAttachments({ taskId }: TaskAttachmentsProps) {
     );
   }
 
-  if (!attachments || attachments.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-8 text-center">
-        <Paperclip className="mb-2 size-8 text-muted-foreground/50" />
-        <p className="text-sm text-muted-foreground">No attachments</p>
-        <p className="text-xs text-muted-foreground">
-          Files attached to this task will appear here
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-2">
-      {attachments.map((attachment) => (
-        <AttachmentItem key={attachment.id} attachment={attachment} taskId={taskId} />
-      ))}
+    <div className="space-y-4">
+      {/* Upload zone */}
+      <FileUpload taskId={taskId} />
+
+      {/* Attachments list */}
+      {attachments && attachments.length > 0 && (
+        <div className="space-y-2">
+          {attachments.map((attachment) => (
+            <AttachmentItem key={attachment.id} attachment={attachment} taskId={taskId} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

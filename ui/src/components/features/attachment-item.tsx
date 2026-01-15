@@ -6,6 +6,7 @@ import { ConfirmDeleteDialog } from "@/components/ui/confirm-delete-dialog";
 import type { Attachment } from "@/hooks/use-tasks";
 import { useDeleteAttachment } from "@/hooks/use-tasks";
 import { toast } from "@/lib/toast";
+import { formatFileSize } from "@/lib/utils";
 
 interface AttachmentItemProps {
   attachment: Attachment;
@@ -88,12 +89,4 @@ function FileTypeIcon({ mimeType }: { mimeType: string | null }) {
     return <FileText className="size-5 text-muted-foreground" />;
   }
   return <File className="size-5 text-muted-foreground" />;
-}
-
-function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const k = 1024;
-  const sizes = ["B", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
