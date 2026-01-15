@@ -2,6 +2,7 @@ import { AlertCircle, BarChart3, TrendingUp, Users } from "lucide-react";
 
 import { AgentPerformanceChart } from "@/components/features/agent-performance-chart";
 import { ExecutionTrendsChart } from "@/components/features/execution-trends-chart";
+import { TaskStatusChart } from "@/components/features/task-status-chart";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -150,12 +151,13 @@ export function AnalyticsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Task Status Distribution</CardTitle>
+              <CardTitle>Execution Status Distribution</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-                Task status chart will be added here
-              </div>
+              <TaskStatusChart
+                executions={executionsData?.executions ?? []}
+                isLoading={isExecutionsLoading}
+              />
             </CardContent>
           </Card>
         </div>
