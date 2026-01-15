@@ -1,7 +1,9 @@
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 
 import { ExecutionCard } from "@/components/features/execution-card";
+import { ExecutionDetailModal } from "@/components/features/execution-detail-modal";
 import { AppLayout } from "@/components/layout/app-layout";
 import { ListFilters } from "@/components/molecules/list-filters";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -31,8 +33,16 @@ const statusTabs: { value: StatusFilter; label: string }[] = [
 ];
 
 export function ExecutionsPage() {
+  const [, setSearchParams] = useSearchParams();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [page, setPage] = useState(1);
+
+  const handleOpenExecution = (executionId: string) => {
+    setSearchParams((prev) => {
+      prev.set("execution", executionId);
+      return prev;
+    });
+  };
 
   const { data, isLoading, isError, error } = useExecutions({
     status: statusFilter === "all" ? undefined : statusFilter,
@@ -184,7 +194,10 @@ export function ExecutionsPage() {
           <ul className="space-y-2" role="list">
             {executions.map((execution) => (
               <li key={execution.id}>
-                <ExecutionCard execution={execution} />
+                <ExecutionCard
+                  execution={execution}
+                  onClick={() => handleOpenExecution(execution.id)}
+                />
               </li>
             ))}
           </ul>
@@ -215,6 +228,8 @@ export function ExecutionsPage() {
             </PaginationContent>
           </Pagination>
         )}
+
+        <ExecutionDetailModal />
       </div>
     </AppLayout>
   );
