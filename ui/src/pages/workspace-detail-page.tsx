@@ -2,6 +2,7 @@ import { AlertCircle, ListTodo, Settings, Users } from "lucide-react";
 import { useParams } from "react-router";
 
 import { WorkspaceHeader } from "@/components/features/workspace-header";
+import { WorkspaceSettingsTab } from "@/components/features/workspace-settings-tab";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -110,15 +111,7 @@ export function WorkspaceDetailPage() {
           </TabsContent>
 
           <TabsContent value="settings" className="mt-6">
-            <div className="rounded-lg border p-6">
-              <h3 className="text-lg font-medium">Workspace Settings</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Configure workspace-specific settings.
-              </p>
-              <div className="mt-4 text-sm text-muted-foreground">
-                Settings management coming soon...
-              </div>
-            </div>
+            <WorkspaceSettingsTab workspaceId={workspace.id} />
           </TabsContent>
         </Tabs>
       </div>
