@@ -104,7 +104,48 @@ export function useReorderAgents() {
       api.put<Agent[]>(`/workspaces/${workspaceId}/agents/reorder`, {
         orderedIds,
       }),
+    onMutate: async ({ workspaceId, orderedIds }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({
+        queryKey: ["workspace", workspaceId, "agents"],
+      });
+
+      // Snapshot the previous value
+      const previousAgents = queryClient.getQueryData<Agent[]>([
+        "workspace",
+        workspaceId,
+        "agents",
+      ]);
+
+      // Optimistically update to the new order
+      if (previousAgents) {
+        const reordered = orderedIds
+          .map((id, index) => {
+            const agent = previousAgents.find((a) => a.id === id);
+            if (!agent) return null;
+            return { ...agent, order: index };
+          })
+          .filter((a): a is Agent => a !== null);
+
+        queryClient.setQueryData(
+          ["workspace", workspaceId, "agents"],
+          reordered,
+        );
+      }
+
+      return { previousAgents };
+    },
+    onError: (_err, { workspaceId }, context) => {
+      // Rollback to previous state on error
+      if (context?.previousAgents) {
+        queryClient.setQueryData(
+          ["workspace", workspaceId, "agents"],
+          context.previousAgents,
+        );
+      }
+    },
     onSuccess: (data, { workspaceId }) => {
+      // Update with server response
       queryClient.setQueryData(["workspace", workspaceId, "agents"], data);
     },
   });
