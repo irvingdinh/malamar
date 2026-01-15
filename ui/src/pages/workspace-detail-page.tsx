@@ -1,8 +1,9 @@
 import { AlertCircle, ListTodo, Settings, Users } from "lucide-react";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
 import { AgentsList } from "@/components/features/agents-list";
 import { TaskBoard } from "@/components/features/task-board";
+import { TaskDetailModal } from "@/components/features/task-detail-modal";
 import { WorkspaceHeader } from "@/components/features/workspace-header";
 import { WorkspaceSettingsTab } from "@/components/features/workspace-settings-tab";
 import { AppLayout } from "@/components/layout/app-layout";
@@ -18,7 +19,15 @@ import { useWorkspace } from "@/hooks/use-workspace";
 
 export function WorkspaceDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const [, setSearchParams] = useSearchParams();
   const { data: workspace, isLoading, isError, error } = useWorkspace(id);
+
+  const handleTaskClick = (task: { id: string }) => {
+    setSearchParams((prev) => {
+      prev.set("task", task.id);
+      return prev;
+    });
+  };
 
   if (isLoading) {
     return (
@@ -93,13 +102,15 @@ export function WorkspaceDetailPage() {
           </TabsContent>
 
           <TabsContent value="tasks" className="mt-6">
-            <TaskBoard workspaceId={workspace.id} />
+            <TaskBoard workspaceId={workspace.id} onTaskClick={handleTaskClick} />
           </TabsContent>
 
           <TabsContent value="settings" className="mt-6">
             <WorkspaceSettingsTab workspaceId={workspace.id} />
           </TabsContent>
         </Tabs>
+
+        <TaskDetailModal />
       </div>
     </AppLayout>
   );
