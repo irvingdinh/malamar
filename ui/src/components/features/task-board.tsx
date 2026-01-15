@@ -1,8 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { AlertCircle, Search } from "lucide-react";
+import { AlertCircle, Plus, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalEvents } from "@/hooks/use-global-events";
@@ -10,6 +11,7 @@ import { type Task, type TaskStatus, useTasks } from "@/hooks/use-tasks";
 
 import { TaskCard } from "./task-card";
 import { TaskColumn } from "./task-column";
+import { TaskCreateDialog } from "./task-create-dialog";
 
 interface TaskBoardProps {
   workspaceId: string;
@@ -21,6 +23,7 @@ const COLUMNS: TaskStatus[] = ["todo", "in_progress", "in_review", "done"];
 export function TaskBoard({ workspaceId, onTaskClick }: TaskBoardProps) {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const { data, isLoading, isError, error } = useTasks(workspaceId, {
     limit: 200,
@@ -91,15 +94,21 @@ export function TaskBoard({ workspaceId, onTaskClick }: TaskBoardProps) {
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search tasks..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9"
-        />
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <Button onClick={() => setIsCreateOpen(true)}>
+          <Plus className="size-4" />
+          <span className="hidden sm:inline">New Task</span>
+        </Button>
       </div>
 
       <div className="flex flex-1 gap-4 overflow-x-auto pb-4">
@@ -126,6 +135,12 @@ export function TaskBoard({ workspaceId, onTaskClick }: TaskBoardProps) {
           );
         })}
       </div>
+
+      <TaskCreateDialog
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        workspaceId={workspaceId}
+      />
     </div>
   );
 }
