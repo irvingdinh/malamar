@@ -34,7 +34,7 @@ const statusConfig: Record<
 };
 
 export function TaskColumn({ status, count, children }: TaskColumnProps) {
-  const config = statusConfig[status];
+  const config = statusConfig[status] ?? statusConfig.todo;
 
   return (
     <div className="flex h-full min-w-[280px] flex-col rounded-lg border bg-muted/30">
@@ -65,5 +65,5 @@ export function TaskColumn({ status, count, children }: TaskColumnProps) {
 }
 
 export function getStatusLabel(status: TaskStatus): string {
-  return statusConfig[status].label;
+  return (statusConfig[status] ?? statusConfig.todo).label;
 }

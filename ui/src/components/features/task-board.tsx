@@ -4,15 +4,17 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type Task, type TaskStatus, useTasks } from "@/hooks/use-tasks";
 
+import { TaskCard } from "./task-card";
 import { TaskColumn } from "./task-column";
 
 interface TaskBoardProps {
   workspaceId: string;
+  onTaskClick?: (task: Task) => void;
 }
 
 const COLUMNS: TaskStatus[] = ["todo", "in_progress", "in_review", "done"];
 
-export function TaskBoard({ workspaceId }: TaskBoardProps) {
+export function TaskBoard({ workspaceId, onTaskClick }: TaskBoardProps) {
   const { data, isLoading, isError, error } = useTasks(workspaceId, {
     limit: 200,
   });
@@ -48,7 +50,11 @@ export function TaskBoard({ workspaceId }: TaskBoardProps) {
               </div>
             ) : (
               columnTasks.map((task) => (
-                <TaskCardPlaceholder key={task.id} task={task} />
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onClick={onTaskClick ? () => onTaskClick(task) : undefined}
+                />
               ))
             )}
           </TaskColumn>
@@ -77,19 +83,6 @@ function TaskBoardSkeleton() {
           </div>
         </div>
       ))}
-    </div>
-  );
-}
-
-function TaskCardPlaceholder({ task }: { task: Task }) {
-  return (
-    <div className="rounded-md border bg-card p-3 shadow-sm">
-      <h4 className="text-sm font-medium">{task.title}</h4>
-      {task.description && (
-        <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-          {task.description}
-        </p>
-      )}
     </div>
   );
 }
