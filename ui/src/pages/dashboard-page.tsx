@@ -1,5 +1,6 @@
 import { BarChart3, Clock, FolderKanban, Zap } from "lucide-react";
 
+import { WorkspaceQuickAccess } from "@/components/features/workspace-quick-access";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -51,9 +52,7 @@ export function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Workspace Quick Access widget will be added in Commit 6.2
-              </p>
+              <WorkspaceQuickAccess />
             </CardContent>
           </Card>
 
