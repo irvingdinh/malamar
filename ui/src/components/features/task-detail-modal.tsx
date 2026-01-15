@@ -14,6 +14,7 @@ import type { TaskStatus } from "@/hooks/use-tasks";
 import { useTask } from "@/hooks/use-tasks";
 import { cn } from "@/lib/utils";
 
+import { TaskComments } from "./task-comments";
 import { TaskInfo } from "./task-info";
 
 const statusConfig: Record<TaskStatus, { label: string; className: string }> = {
@@ -104,11 +105,16 @@ export function TaskDetailModal() {
               </SheetDescription>
             </SheetHeader>
 
-            <div className="flex-1 overflow-y-auto px-4 pb-4">
+            <div className="flex-1 space-y-6 overflow-y-auto px-4 pb-4">
               <TaskInfo task={task} />
 
+              {/* Comments Section */}
+              <section>
+                <h4 className="mb-3 text-sm font-medium">Comments</h4>
+                <TaskComments taskId={task.id} />
+              </section>
+
               {/* Additional sections will be added in subsequent commits */}
-              {/* Commit 5.3: Comments section */}
               {/* Commit 5.5: Attachments section */}
               {/* Commit 5.7: Task Actions */}
             </div>
