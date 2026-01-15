@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
 
+import { AnalyticsPage } from "@/pages/analytics-page.tsx";
 import { DashboardPage } from "@/pages/dashboard-page.tsx";
 import { ExecutionLogPage } from "@/pages/execution-log-page.tsx";
 import { ExecutionsPage } from "@/pages/executions-page.tsx";
@@ -13,5 +14,6 @@ export const router = createBrowserRouter([
   { path: "/workspace/:id", element: <WorkspaceDetailPage /> },
   { path: "/executions", element: <ExecutionsPage /> },
   { path: "/executions/:id/logs", element: <ExecutionLogPage /> },
+  { path: "/analytics", element: <AnalyticsPage /> },
   { path: "/settings", element: <SettingsPage /> },
 ]);

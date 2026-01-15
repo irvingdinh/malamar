@@ -1,4 +1,4 @@
-import { FolderIcon, Play, Settings, SquareTerminal } from "lucide-react";
+import { BarChart3, FolderIcon, Play, Settings, SquareTerminal } from "lucide-react";
 import { Link, useLocation } from "react-router";
 
 import {
@@ -27,6 +27,12 @@ const items = [
     url: "/executions",
     icon: Play,
     isActive: (pathname: string) => pathname.startsWith("/executions"),
+  },
+  {
+    title: "Analytics",
+    url: "/analytics",
+    icon: BarChart3,
+    isActive: (pathname: string) => pathname === "/analytics",
   },
   {
     title: "Settings",
