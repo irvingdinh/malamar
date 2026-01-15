@@ -1,5 +1,6 @@
 import { BarChart3, Clock, FolderKanban, Zap } from "lucide-react";
 
+import { ActivityOverview } from "@/components/features/activity-overview";
 import { WorkspaceQuickAccess } from "@/components/features/workspace-quick-access";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,9 +66,7 @@ export function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Activity Overview widget will be added in Commit 6.3
-              </p>
+              <ActivityOverview />
             </CardContent>
           </Card>
         </div>
