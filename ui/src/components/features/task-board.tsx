@@ -233,7 +233,7 @@ export function TaskBoard({ workspaceId, onTaskClick }: TaskBoardProps) {
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}
       >
-        <div className="flex flex-1 gap-4 overflow-x-auto pb-4">
+        <div className="flex flex-1 gap-3 overflow-x-auto pb-4 snap-x snap-mandatory sm:snap-none sm:gap-4">
           {COLUMNS.map((status) => {
             const columnTasks = tasksByStatus[status] || [];
             const isDropDisabled = !ALLOWED_DROP_STATUSES.includes(status);

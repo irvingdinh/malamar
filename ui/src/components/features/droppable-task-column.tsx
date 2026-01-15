@@ -53,7 +53,7 @@ export function DroppableTaskColumn({
     <div
       ref={setNodeRef}
       className={cn(
-        "flex h-full min-w-[280px] flex-col rounded-lg border bg-muted/30 transition-colors",
+        "flex h-full min-w-[260px] flex-col rounded-lg border bg-muted/30 transition-colors snap-center sm:min-w-[280px] sm:snap-align-none",
         isOver && !isDropDisabled && "ring-2 ring-primary ring-offset-2",
         isDropDisabled && "opacity-60",
       )}
