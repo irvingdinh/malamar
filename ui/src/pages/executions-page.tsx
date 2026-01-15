@@ -1,6 +1,7 @@
-import { AlertCircle, Clock, Play } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 
+import { ExecutionCard } from "@/components/features/execution-card";
 import { AppLayout } from "@/components/layout/app-layout";
 import { ListFilters } from "@/components/molecules/list-filters";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,13 +16,7 @@ import {
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  type Execution,
-  type ExecutionResult,
-  type ExecutionStatus,
-  useExecutions,
-} from "@/hooks/use-executions";
-import { cn } from "@/lib/utils";
+import { type ExecutionStatus, useExecutions } from "@/hooks/use-executions";
 
 const PAGE_SIZE = 20;
 
@@ -34,56 +29,6 @@ const statusTabs: { value: StatusFilter; label: string }[] = [
   { value: "failed", label: "Failed" },
   { value: "pending", label: "Pending" },
 ];
-
-const statusConfig: Record<ExecutionStatus, { label: string; className: string }> = {
-  pending: {
-    label: "Pending",
-    className: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
-  },
-  running: {
-    label: "Running",
-    className: "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300",
-  },
-  completed: {
-    label: "Completed",
-    className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
-  },
-  failed: {
-    label: "Failed",
-    className: "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
-  },
-};
-
-const resultConfig: Record<NonNullable<ExecutionResult>, { label: string; className: string }> = {
-  skip: {
-    label: "Skip",
-    className: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400",
-  },
-  comment: {
-    label: "Comment",
-    className: "bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300",
-  },
-  error: {
-    label: "Error",
-    className: "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
-  },
-};
-
-function formatDuration(startedAt: number | null, completedAt: number | null): string {
-  if (!startedAt) return "-";
-  const end = completedAt ?? Date.now();
-  const durationMs = end - startedAt;
-
-  if (durationMs < 1000) return `${durationMs}ms`;
-  if (durationMs < 60000) return `${(durationMs / 1000).toFixed(1)}s`;
-  const minutes = Math.floor(durationMs / 60000);
-  const seconds = Math.floor((durationMs % 60000) / 1000);
-  return `${minutes}m ${seconds}s`;
-}
-
-function formatTimestamp(timestamp: number): string {
-  return new Date(timestamp).toLocaleString();
-}
 
 export function ExecutionsPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
@@ -239,7 +184,7 @@ export function ExecutionsPage() {
           <ul className="space-y-2" role="list">
             {executions.map((execution) => (
               <li key={execution.id}>
-                <ExecutionRow execution={execution} />
+                <ExecutionCard execution={execution} />
               </li>
             ))}
           </ul>
@@ -272,61 +217,5 @@ export function ExecutionsPage() {
         )}
       </div>
     </AppLayout>
-  );
-}
-
-function ExecutionRow({ execution }: { execution: Execution }) {
-  const statusCfg = statusConfig[execution.status];
-  const resultCfg = execution.result ? resultConfig[execution.result] : null;
-  const duration = formatDuration(execution.startedAt, execution.completedAt);
-
-  return (
-    <div className="flex flex-col gap-2 rounded-md border p-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex flex-1 flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-        <div className="flex items-center gap-2">
-          {execution.status === "running" ? (
-            <Play className="h-4 w-4 animate-pulse text-blue-500" aria-hidden="true" />
-          ) : (
-            <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-          )}
-          <span className="font-medium">{execution.agentName}</span>
-        </div>
-        <span className="text-sm text-muted-foreground" aria-label={`Execution ID: ${execution.id.slice(0, 8)}`}>
-          {execution.id.slice(0, 8)}
-        </span>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-2">
-        <span
-          aria-label={`Status: ${statusCfg.label}`}
-          className={cn(
-            "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium",
-            statusCfg.className,
-          )}
-        >
-          {statusCfg.label}
-        </span>
-
-        {resultCfg && (
-          <span
-            aria-label={`Result: ${resultCfg.label}`}
-            className={cn(
-              "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium",
-              resultCfg.className,
-            )}
-          >
-            {resultCfg.label}
-          </span>
-        )}
-
-        <span className="text-sm text-muted-foreground" aria-label={`Duration: ${duration}`}>
-          {duration}
-        </span>
-
-        <span className="text-xs text-muted-foreground">
-          {formatTimestamp(execution.createdAt)}
-        </span>
-      </div>
-    </div>
   );
 }
