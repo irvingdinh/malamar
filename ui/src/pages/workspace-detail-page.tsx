@@ -1,6 +1,7 @@
 import { AlertCircle, ListTodo, Settings, Users } from "lucide-react";
 import { useParams } from "react-router";
 
+import { WorkspaceHeader } from "@/components/features/workspace-header";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -66,14 +67,7 @@ export function WorkspaceDetailPage() {
           Workspace {workspace.name} loaded
         </div>
 
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {workspace.name}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Manage agents, tasks, and settings for this workspace
-          </p>
-        </div>
+        <WorkspaceHeader workspace={workspace} />
 
         <Tabs defaultValue="agents" className="w-full">
           <TabsList>
