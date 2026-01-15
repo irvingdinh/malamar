@@ -1,5 +1,6 @@
 import { AlertCircle, BarChart3, TrendingUp, Users } from "lucide-react";
 
+import { AgentPerformanceChart } from "@/components/features/agent-performance-chart";
 import { ExecutionTrendsChart } from "@/components/features/execution-trends-chart";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -140,9 +141,10 @@ export function AnalyticsPage() {
               <CardTitle>Agent Performance</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-                Agent performance chart will be added here
-              </div>
+              <AgentPerformanceChart
+                analytics={analytics ?? []}
+                isLoading={isLoading}
+              />
             </CardContent>
           </Card>
 
