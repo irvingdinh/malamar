@@ -31,7 +31,9 @@ Malamar is designed for self-hosters running on their own machines:
 
 ```bash
 # Development
-make dev-server              # Run server with hot reload
+make dev                     # Run server and UI with hot reload
+make dev-server              # Run server only with hot reload
+make dev-ui                  # Run UI only with hot reload
 make install                 # Install dependencies
 
 # Build
