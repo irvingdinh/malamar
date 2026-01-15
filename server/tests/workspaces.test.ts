@@ -57,9 +57,96 @@ describe('Workspaces Module', () => {
     const res = await get('/api/workspaces')
     expect(res.status).toBe(200)
 
-    const data = await json<Array<{ id: string; name: string }>>(res)
-    expect(Array.isArray(data)).toBe(true)
-    expect(data.length).toBeGreaterThan(0)
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    expect(Array.isArray(body.data)).toBe(true)
+    expect(body.data.length).toBeGreaterThan(0)
+    expect(typeof body.total).toBe('number')
+    expect(body.total).toBeGreaterThan(0)
+  })
+
+  test('GET /api/workspaces - supports pagination', async () => {
+    // Create a few workspaces to test pagination
+    await factory.createWorkspace('Pagination Test 1')
+    await factory.createWorkspace('Pagination Test 2')
+
+    const res = await get('/api/workspaces?limit=1&offset=0')
+    expect(res.status).toBe(200)
+
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    expect(body.data.length).toBe(1)
+    expect(body.total).toBeGreaterThan(1)
+  })
+
+  test('GET /api/workspaces - supports search', async () => {
+    await factory.createWorkspace('UniqueSearchTerm123')
+
+    const res = await get('/api/workspaces?q=UniqueSearchTerm123')
+    expect(res.status).toBe(200)
+
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    expect(body.data.length).toBe(1)
+    expect(body.data[0].name).toBe('UniqueSearchTerm123')
+  })
+
+  test('GET /api/workspaces - clamps invalid limit', async () => {
+    const res = await get('/api/workspaces?limit=9999')
+    expect(res.status).toBe(200)
+
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    // Should return at most 100 items (max limit)
+    expect(body.data.length).toBeLessThanOrEqual(100)
+  })
+
+  test('GET /api/workspaces - handles negative offset', async () => {
+    const res = await get('/api/workspaces?offset=-5')
+    expect(res.status).toBe(200)
+
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    // Should treat negative offset as 0 and return results
+    expect(Array.isArray(body.data)).toBe(true)
+  })
+
+  test('GET /api/workspaces - handles non-numeric params', async () => {
+    const res = await get('/api/workspaces?limit=abc&offset=xyz')
+    expect(res.status).toBe(200)
+
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    // Should apply defaults and return results
+    expect(Array.isArray(body.data)).toBe(true)
+  })
+
+  test('GET /api/workspaces - escapes search wildcards', async () => {
+    await factory.createWorkspace('Test_Underscore')
+    await factory.createWorkspace('TestXUnderscore')
+
+    // _ should NOT match any character (should be escaped)
+    const res = await get('/api/workspaces?q=Test_Underscore')
+    expect(res.status).toBe(200)
+
+    const body = await json<{
+      data: Array<{ id: string; name: string }>
+      total: number
+    }>(res)
+    expect(body.data.length).toBe(1)
+    expect(body.data[0].name).toBe('Test_Underscore')
   })
 
   test('GET /api/workspaces/:id - gets workspace by ID', async () => {

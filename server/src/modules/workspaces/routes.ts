@@ -11,10 +11,22 @@ const workspaces = new Hono()
 
 /**
  * GET /api/workspaces - List all workspaces
+ * Query params:
+ *   - limit: Number of items to return (default: 100, max: 100)
+ *   - offset: Number of items to skip (default: 0)
+ *   - q: Search query for name (case-insensitive contains)
  */
 workspaces.get('/', (c) => {
-  const list = workspaceService.list()
-  return c.json(list)
+  const rawLimit = parseInt(c.req.query('limit') || '100', 10)
+  const rawOffset = parseInt(c.req.query('offset') || '0', 10)
+  const q = c.req.query('q')
+
+  // Validate and clamp pagination params
+  const limit = Math.min(100, Math.max(1, isNaN(rawLimit) ? 100 : rawLimit))
+  const offset = Math.max(0, isNaN(rawOffset) ? 0 : rawOffset)
+
+  const result = workspaceService.list({ limit, offset, q })
+  return c.json(result)
 })
 
 /**

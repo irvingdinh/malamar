@@ -12,6 +12,7 @@ import type {
   WorkspaceSettingRow,
   CreateWorkspaceInput,
   UpdateWorkspaceInput,
+  WorkspaceListParams,
 } from './types'
 
 // Helper to convert database row to Workspace
@@ -52,6 +53,54 @@ export const workspaceRepository = {
       )
       .all()
     return rows.map(rowToWorkspace)
+  },
+
+  /**
+   * Find workspaces with pagination and optional search
+   */
+  findAllPaginated(
+    params?: WorkspaceListParams
+  ): { workspaces: Workspace[]; total: number } {
+    const db = getDb()
+    const queryParams: (string | number)[] = []
+
+    let countSql = 'SELECT COUNT(*) as count FROM workspaces'
+    let dataSql = 'SELECT * FROM workspaces'
+
+    // Add search filter if provided
+    if (params?.q && params.q.trim()) {
+      const searchClause = " WHERE name LIKE ? ESCAPE '\\'"
+      // Escape LIKE wildcards (% and _) for literal search
+      const escaped = params.q.trim().replace(/[%_\\]/g, '\\$&')
+      const searchParam = `%${escaped}%`
+      countSql += searchClause
+      dataSql += searchClause
+      queryParams.push(searchParam)
+    }
+
+    // Get total count
+    const countResult = db
+      .query<{ count: number }, (string | number)[]>(countSql)
+      .get(...queryParams)
+    const total = countResult?.count ?? 0
+
+    // Add ordering
+    dataSql += ' ORDER BY updated_at DESC'
+
+    // Add pagination
+    const limit = params?.limit ?? 100
+    const offset = params?.offset ?? 0
+    dataSql += ' LIMIT ? OFFSET ?'
+
+    const allParams = [...queryParams, limit, offset]
+    const rows = db
+      .query<WorkspaceRow, (string | number)[]>(dataSql)
+      .all(...allParams)
+
+    return {
+      workspaces: rows.map(rowToWorkspace),
+      total,
+    }
   },
 
   /**

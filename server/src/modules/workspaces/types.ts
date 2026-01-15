@@ -30,6 +30,17 @@ export interface UpdateWorkspaceInput {
   name?: string
 }
 
+export interface WorkspaceListParams {
+  limit?: number
+  offset?: number
+  q?: string
+}
+
+export interface WorkspaceListResponse {
+  data: WorkspaceWithSettings[]
+  total: number
+}
+
 // Known settings keys
 export type SettingKey = 'instruction'
 

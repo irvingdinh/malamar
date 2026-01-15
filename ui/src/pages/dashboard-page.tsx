@@ -1,7 +1,11 @@
+import { AppLayout } from "@/components/layout/app-layout";
+
 export function DashboardPage() {
   return (
-    <div>
-      <p>Lorem ipsum dolor sit amet</p>
-    </div>
+    <AppLayout>
+      <div>
+        <p>Lorem ipsum dolor sit amet</p>
+      </div>
+    </AppLayout>
   );
 }

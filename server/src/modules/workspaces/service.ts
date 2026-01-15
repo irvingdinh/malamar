@@ -13,18 +13,21 @@ import type {
   WorkspaceWithSettings,
   CreateWorkspaceInput,
   UpdateWorkspaceInput,
+  WorkspaceListParams,
+  WorkspaceListResponse,
 } from './types'
 
 export const workspaceService = {
   /**
-   * List all workspaces with settings eager-loaded
+   * List workspaces with pagination and optional search
    */
-  list(): WorkspaceWithSettings[] {
-    const workspaces = workspaceRepository.findAll()
-    return workspaces.map((workspace) => ({
+  list(params?: WorkspaceListParams): WorkspaceListResponse {
+    const { workspaces, total } = workspaceRepository.findAllPaginated(params)
+    const data = workspaces.map((workspace) => ({
       ...workspace,
       settings: settingsRepository.findByWorkspaceId(workspace.id),
     }))
+    return { data, total }
   },
 
   /**
